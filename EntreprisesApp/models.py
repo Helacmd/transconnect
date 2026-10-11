@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator,RegexValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 def validate_email(value):
     if not value:
         raise ValidationError("l'adress email est obligatoire")#you can replace this with blank=False below
@@ -11,7 +12,7 @@ def validate_email(value):
 #notre propre classe utilisateur 121relation
 class Utilisateur(AbstractUser):
     user_id = models.CharField(max_length=8, primary_key=True, editable=False)
-    email = models.EmailField(validators=[],unique = True)
+    email = models.EmailField(validators=[validate_email],unique = True)
     telephone = models.CharField(max_length=15, null=True, blank=True)
     role = models.CharField(max_length=20, choices=[
        ('chargeur', 'Chargeur'),
@@ -20,6 +21,21 @@ class Utilisateur(AbstractUser):
        ],default="transporteur")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def _generate_user_id(cls):
+        annee = timezone.now().strftime('%y')
+        prefixe = f"{annee}user"
+        dernier = cls.objects.filter(user_id__startswith=prefixe).order_by('-user_id').first()
+        compteur = int(dernier.user_id[-2:]) + 1 if dernier else 0
+        if compteur > 99:
+            raise ValidationError("Limite d'utilisateurs atteinte pour cette année")
+        return f"{prefixe}{compteur:02d}"
+
+    def save(self, *args, **kwargs):
+        if not self.user_id:
+            self.user_id = self._generate_user_id()
+        super().save(*args, **kwargs)
 #classe entreprise
 class Entreprise(models.Model):
     raison_social = models.CharField(max_length=200,null=False,blank=False)
