@@ -52,3 +52,5 @@ class Entreprise(models.Model):
     #les relations sont bidirectionnelles on peut acceder a les deux tabs selon 
     #limited-choice='chargeur' de preference dans les formulaires
     gerant = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, related_name='entreprise')
+    def __str__(self):
+        return self.raison_social

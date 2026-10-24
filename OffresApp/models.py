@@ -28,7 +28,7 @@ class Offre(models.Model):
         if self.vehicule_id and self.transporteur_id and self.vehicule.entreprise_id != self.transporteur_id:
             raise ValidationError({'vehicule': "Le véhicule doit appartenir à l'entreprise qui fait l'offre"})
         if not self.pk and self.expedition_id and self.expedition.statut != 'publiee':
-            raise ValidationError({'expedition': "L'expédition n'est plus au statut publiée"})
+            raise ValidationError({'expedition': "L'expédition n'est plus au statut publiée"})#dictionnaire indication ou l'erreur saret
         if self.statut == 'proposee' and self.expedition_id and self.transporteur_id:
             offres_doublons = Offre.objects.filter(expedition_id=self.expedition_id, transporteur_id=self.transporteur_id, statut='proposee')
             if self.pk:
