@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.utils.html import format_html
 from .models import Offre
-
+from . import health_check 
 
 @admin.action(description="Exporter la sélection en CSV")
 def exporter_offres_csv(modeladmin, request, queryset):
@@ -14,7 +14,7 @@ def exporter_offres_csv(modeladmin, request, queryset):
     for offre in queryset.select_related('expedition', 'transporteur'):
         writer.writerow([
             offre.expedition.reference,
-            offre.transporteur.raison_social,
+            offre.transporteur.raison_sociale,
             offre.prix,
             offre.statut,
         ])
@@ -25,7 +25,7 @@ def exporter_offres_csv(modeladmin, request, queryset):
 class OffreAdmin(admin.ModelAdmin):
     list_display = ('expedition', 'transporteur', 'vehicule', 'prix', 'statut_colore', 'date_proposition')
     list_filter = ('statut',)
-    search_fields = ('expedition__reference', 'transporteur__raison_social')
+    search_fields = ('expedition__reference', 'transporteur__raison_sociale')
     ordering = ('-created_at',)
     date_hierarchy = 'date_proposition'
     list_per_page = 25

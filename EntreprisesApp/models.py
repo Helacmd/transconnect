@@ -38,11 +38,11 @@ class Utilisateur(AbstractUser):
         super().save(*args, **kwargs)
 #classe entreprise
 class Entreprise(models.Model):
-    raison_social = models.CharField(max_length=200,null=False,blank=False)
+    raison_sociale = models.CharField(max_length=200,null=False,blank=False)
     matricule_fiscale_validator=RegexValidator(regex=r'^\d{7}[/ -]?[A-Za-z][/ -]?[ABDNPEabdnpe][/ -]?[MPCNEmpcne][/ -]\d{3}$',
                                                message="Format non conforme")
     matricule_fiscal = models.CharField(max_length=17,blank=False,unique=True,validators=[matricule_fiscale_validator])
-    adress = models.TextField(validators=[MinLengthValidator(20,"l'adress doit contenir au min 2 caracteres")])
+    adresse = models.TextField(validators=[MinLengthValidator(20,"l'adress doit contenir au min 2 caracteres")])
     type_entreprise = models.CharField(max_length=100,choices=[
         ('chargeur', 'Chargeur'),
         ('transporteur', 'Transporteur'),
@@ -53,4 +53,4 @@ class Entreprise(models.Model):
     #limited-choice='chargeur' de preference dans les formulaires
     gerant = models.OneToOneField(Utilisateur, on_delete=models.CASCADE, related_name='entreprise')
     def __str__(self):
-        return self.raison_social
+        return self.raison_sociale

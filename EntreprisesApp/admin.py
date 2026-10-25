@@ -28,17 +28,17 @@ class VehiculeInline(admin.TabularInline):
 
 @admin.register(Entreprise)
 class EntrepriseAdmin(admin.ModelAdmin):
-    list_display = ('raison_social', 'matricule_fiscal', 'type_entreprise', 'gerant', 'created_at')
+    list_display = ('raison_sociale', 'matricule_fiscal', 'type_entreprise', 'gerant', 'created_at')
     list_filter = ('type_entreprise',)
-    search_fields = ('raison_social', 'matricule_fiscal')
+    search_fields = ('raison_sociale', 'matricule_fiscal')
     ordering = ('-created_at',)
     date_hierarchy = 'created_at'
     list_per_page = 25
     autocomplete_fields = ('gerant',)
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
-        ('Identité', {'fields': ('raison_social', 'matricule_fiscal', 'type_entreprise')}),
-        ('Coordonnées', {'fields': ('adress', 'gerant')}),
+        ('Identité', {'fields': ('raison_sociale', 'matricule_fiscal', 'type_entreprise')}),
+        ('Coordonnées', {'fields': ('adresse', 'gerant')}),
         ('Suivi', {'fields': ('created_at', 'updated_at')}),
     )
     inlines = [VehiculeInline]

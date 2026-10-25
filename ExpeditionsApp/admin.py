@@ -37,7 +37,7 @@ class OffreInline(admin.StackedInline):
 class ExpeditionAdmin(admin.ModelAdmin):
     list_display = ('reference', 'entreprise', 'ville_depart', 'ville_arrivee', 'statut', 'statut_colore', 'date_souhaitee')
     list_filter = ('statut', 'ville_depart', EnRetardFilter)
-    search_fields = ('reference', 'entreprise__raison_social')
+    search_fields = ('reference', 'entreprise__raison_sociale')
     list_editable = ('statut',)
     ordering = ('-created_at',)
     date_hierarchy = 'date_souhaitee'

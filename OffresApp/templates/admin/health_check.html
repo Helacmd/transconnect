@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Accueil</a> &rsaquo; Contrôle d'intégrité
+</div>
+{% endblock %}
+
+{% block content %}
+<p>
+  {% if total == 0 %}
+    Aucune anomalie détectée.
+  {% else %}
+    {{ total }} anomalie(s) détectée(s).
+  {% endif %}
+</p>
+
+{% for c in controles %}
+<div class="module">
+  <h2>{{ c.titre }} : {{ c.lignes|length }} anomalie(s)</h2>
+  <p>{{ c.regle }}</p>
+  {% if c.lignes %}
+  <table>
+    <thead>
+      <tr>{% for col in c.colonnes %}<th>{{ col }}</th>{% endfor %}</tr>
+    </thead>
+    <tbody>
+      {% for ligne in c.lignes %}
+      <tr>{% for valeur in ligne %}<td>{{ valeur }}</td>{% endfor %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>Aucune anomalie.</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
